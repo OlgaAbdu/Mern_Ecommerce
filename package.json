@@ -11,9 +11,11 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.3.7",
+    "chai-subset": "^1.6.0",
     "mocha": "^10.2.0"
   },
   "dependencies": {
+    "casual": "^1.6.2",
     "superagent": "^8.0.9"
   }
 }
