@@ -5,8 +5,10 @@ const casual = require('casual');
 const chaiSubset = require('chai-subset');
 chai.use(chaiSubset);
 const expect = chai.expect;
-
+const clientAddress = require("../src/client/address")
+const clientAuth = require("../src/client/auth");
 const baseUrl = "https://mern-ecommerce.sdet.school/api"
+
 describe('Test address endpoints', () => {
   let token;
   beforeEach(async () => {
@@ -16,7 +18,7 @@ describe('Test address endpoints', () => {
       password: 'Password1'
     };
     try {
-      const response = await superagent.post(baseUrl + "/auth/login").send(reqBody);
+      const response = await clientAuth.login(reqBody);
       token = response.body.token;
     } catch (error) {
       console.error(error.message);
@@ -42,6 +44,7 @@ describe('Test subscription to newsletters', () => {
     assert.deepEqual(response.body, responseBody);
   });
 
+
   it("should add adress to user", async () => {
     const { street, city, state } = casual;
     const zip = casual.zip(5);
@@ -51,15 +54,16 @@ describe('Test subscription to newsletters', () => {
       city: city,
       state: state,
       country: "US",
-      zipCode: zip
+      zipCode: zip ,
     }
-    let response
+    let response;
+    const opts = {
+      token,
+      address: addressOpt
+    };
+    console.log(opts)
     try {
-      response = await superagent.post(baseUrl+ "/address/add")
-        .set({
-          Autorization: token
-        })
-        .send(addressOpt)
+      response = await clientAddress.addAddress(opts);
     } catch (err) {
       console.log(err.message)
     }
@@ -77,7 +81,21 @@ describe('Test subscription to newsletters', () => {
         _v: 0
       }
     })
+  });
+  it.only(" should register user" ,async() =>{
+    const opts = {
+      "email": "user33333@email.com",
+      "firstName": "Harold",
+      "lastName": "Olsen",
+      "password": "Password1"
+    }
+    let response;
+    try{
+      response = await clientAuth.register(opts)
+    }catch(err){
+      console.log(err.text)
+    }
+    console.log(response)
   })
 });
-
 
