@@ -8,6 +8,7 @@ const expect = chai.expect;
 const clientAddress = require("../src/client/address")
 const clientAuth = require("../src/client/auth");
 const baseUrl = "https://mern-ecommerce.sdet.school/api"
+const User = require ("../src/users/users");
 
 describe('Test address endpoints', () => {
   let token;
@@ -96,6 +97,10 @@ describe('Test subscription to newsletters', () => {
       console.log(err.text)
     }
     console.log(response)
+  })
+  it.only("should create a user" , async()=>{
+    const User = new User ();
+  await User.register();
   })
 });
 
